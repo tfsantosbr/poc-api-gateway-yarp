@@ -18,19 +18,17 @@
 
 - [x] Estrutura
 
-  - [x] Provisionar o Krakend no Docker Compose
+  - [ ] Provisionar o Yarp no Docker Compose
 
 - [ ] Funcionalidades
 
   - [x] Mapear endpoints de Orders
   - [x] Mapear endpoints de Products
-  - [x] Adicionar Rate Limit em Orders
-  - [x] Adicionar Autenticação (Keycloak)
-  - [x] Adicionar Autorização (Keycloak)
+  - [ ] Adicionar Rate Limit em Orders
+  - [ ] Adicionar Autenticação (Keycloak)
+  - [ ] Adicionar Autorização (Keycloak)
   - [ ] Adicionar uma funcionalidade de BFF entre Orders e Products
   - [ ] Adicionar Monitoramento
-    - [x] Métricas
-    - [x] Traces
+    - [ ] Métricas
+    - [ ] Traces
     - [ ] Logs
-      - [ ] Tentativa com Open Telemetry sem sucesso
-      - [ ] Tentativa com Fluent Bit sem sucesso
