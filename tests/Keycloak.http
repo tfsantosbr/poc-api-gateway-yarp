@@ -1,6 +1,6 @@
 @host = localhost:7000
 @realm = eventflix
-@cliendId = api-gateway
+@cliendId = gateway-api
 @username = customer@email.com
 @password = 123456
 

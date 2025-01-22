@@ -24,9 +24,10 @@
 
   - [x] Mapear endpoints de Orders
   - [x] Mapear endpoints de Products
-  - [ ] Adicionar Rate Limit em Orders
-  - [ ] Adicionar Autenticação (Keycloak)
-  - [ ] Adicionar Autorização (Keycloak)
+  - [x] Adicionar Rate Limit no endpoint GET /orders
+  - [x] Adicionar Rate Limit no endpoint GET /products
+  - [x] Adicionar Autenticação (Keycloak)
+  - [x] Adicionar Autorização (Keycloak) POST /orders (somente manager e email verificado)
   - [ ] Adicionar uma funcionalidade de BFF entre Orders e Products
   - [ ] Adicionar Monitoramento
     - [ ] Métricas
