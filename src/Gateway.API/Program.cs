@@ -1,5 +1,4 @@
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
@@ -44,16 +43,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Configurar autorização
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireManagerRolePolicy", policy =>
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("RequireManagerRolePolicy", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("email_verified", "true");
         policy.RequireAssertion(context =>
             context.User.HasClaim(c => c.Type == "realm_access" && c.Value.Contains("manager")));
     });
-});
 
 // Configure OpenTelemetry
 builder.Services.AddOpenTelemetry()
@@ -96,4 +93,5 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapReverseProxy();
+
 app.Run();
