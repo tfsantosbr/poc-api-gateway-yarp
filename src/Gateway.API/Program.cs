@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +52,41 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("email_verified", "true");
         policy.RequireAssertion(context =>
             context.User.HasClaim(c => c.Type == "realm_access" && c.Value.Contains("manager")));
+    });
+});
+
+// Configure OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder => tracerProviderBuilder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Gateway.API"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddOtlpExporter(options =>
+        {
+            options.Endpoint = new Uri("http://otel-collector:4317");
+            options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+        }))
+    .WithMetrics(meterProviderBuilder => meterProviderBuilder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Gateway.API"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddOtlpExporter(options =>
+        {
+            options.Endpoint = new Uri("http://otel-collector:4317");
+            options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+        }));
+
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Gateway.API"));
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
+    options.ParseStateValues = true;
+    options.AddOtlpExporter(otlpOptions =>
+    {
+        otlpOptions.Endpoint = new Uri("http://otel-collector:4317");
+        otlpOptions.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
     });
 });
 
