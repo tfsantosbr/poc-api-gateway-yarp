@@ -23,5 +23,5 @@ DELETE {{hostUrl}}/products/v1/products/1
 Accept: application/json
 
 ### Get all categories
-GET {{hostUrl}}/products/v1/categories
+GET {{hostUrl}}/products/v1/products/categories
 Accept: application/json

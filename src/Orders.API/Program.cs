@@ -61,6 +61,30 @@ app.MapDelete("/orders/{id}", (int id) => Results.NoContent());
 
 app.MapHealthChecks("/health");
 
+// Add correlation id middleware
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+
+    if (!context.Request.Headers.TryGetValue("CorrelationId", out var correlationId))
+    {
+        correlationId = Guid.NewGuid().ToString();
+        context.Request.Headers.Append("CorrelationId", correlationId);
+    }
+
+    context.Response.Headers.Append("CorrelationId", correlationId);
+
+    var correlationIdLogScope = new Dictionary<string, object>
+    {
+        ["CorrelationId"] = correlationId
+    };
+
+    using (logger.BeginScope(correlationIdLogScope))
+    {
+        await next(context);
+    }
+});
+
 // Middleware de logging
 app.Use(async (context, next) =>
 {

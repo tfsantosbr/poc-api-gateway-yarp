@@ -89,6 +89,28 @@ builder.Logging.AddOpenTelemetry(options =>
 
 var app = builder.Build();
 
+// Add correlation id middleware
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+
+    if (!context.Request.Headers.TryGetValue("CorrelationId", out var correlationId))
+    {
+        correlationId = Guid.NewGuid().ToString();
+        context.Request.Headers.Append("CorrelationId", correlationId);
+    }
+
+    var correlationIdLogScope = new Dictionary<string, object>
+    {
+        ["CorrelationId"] = correlationId
+    };
+
+    using (logger.BeginScope(correlationIdLogScope))
+    {
+        await next(context);
+    }
+});
+
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();

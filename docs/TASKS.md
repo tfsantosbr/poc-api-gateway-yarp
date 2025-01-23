@@ -18,9 +18,9 @@
 
 - [x] Estrutura
 
-  - [ ] Provisionar o Yarp no Docker Compose
+  - [x] Provisionar o Yarp no Docker Compose
 
-- [ ] Funcionalidades
+- [x] Funcionalidades
 
   - [x] Mapear endpoints de Orders
   - [x] Mapear endpoints de Products
@@ -28,8 +28,8 @@
   - [x] Adicionar Rate Limit no endpoint GET /products
   - [x] Adicionar Autenticação (Keycloak)
   - [x] Adicionar Autorização (Keycloak) POST /orders (somente manager e email verificado)
-  - [ ] Adicionar uma funcionalidade de BFF entre Orders e Products
-  - [ ] Adicionar Monitoramento
-    - [ ] Métricas
-    - [ ] Traces
-    - [ ] Logs
+  - [x] Adicionar Correlation ID
+  - [x] Adicionar Monitoramento
+    - [x] Métricas
+    - [x] Traces
+    - [x] Logs
